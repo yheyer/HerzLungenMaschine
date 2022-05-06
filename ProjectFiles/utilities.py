@@ -15,9 +15,11 @@ class Subject():
 
         __f = open(file_name)
         self.subject_data = pd.read_csv(__f)
+
         # Nachdem Lücken nur klein sind und Daten kein gekrümmtes Verhalten aufweißen,
         # ist hier linear oder nearest am sinnvollsten.
         self.subject_data = self.subject_data.interpolate(method="nearest", axis=0) 
+        
         __splited_id = re.findall(r'\d+',file_name)      
         self.subject_id = ''.join(__splited_id)
         self.names = self.subject_data.columns.values.tolist()
