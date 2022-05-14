@@ -8,14 +8,16 @@ import re
 
 # Classes 
 
-class Subject():
-    def __init__(self, file_name):
-
+class Subject(): #erstellt Klasse "Subject"
+    def __init__(self, file_name): # über Konstruktor "__init__" wird die Klasse instantiiert 
+        # Klasse hat das Attribut: "file_name" (gilt als Variable für einen Dateipfad)
+ 
         ### Aufgabe 1: Interpolation ###
 
-        __f = open(file_name)
-        self.subject_data = pd.read_csv(__f)
-        self.subject_data = self.subject_data.interpolate(method='linear', axis=0)
+        __f = open(file_name) # open öffnet die Datei "file_name"
+        self.subject_data = pd.read_csv(__f) #pd.read liest die Daten der Datei 
+        self.subject_data = self.subject_data.interpolate(method='quadratic', axis=0) #interpolate (hier knackpunkt) erstellt Datenpunkte zwischen den Daten aus "__f"
+        #interpolate(method='linear', axis=0) stellt eine lineare verbindung her 
         __splited_id = re.findall(r'\d+',file_name)      
         self.subject_id = ''.join(__splited_id)
         self.names = self.subject_data.columns.values.tolist()
