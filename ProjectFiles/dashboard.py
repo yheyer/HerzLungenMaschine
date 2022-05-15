@@ -16,18 +16,14 @@ app = Dash(__name__)
 list_of_subjects = []
 subj_numbers = []
 number_of_subjects = 0
+file_extension = ''
 
-folder_current = os.path.dirname(__file__) 
-print(folder_current)
-folder_input_data = os.path.join(folder_current, "input_data")
-for file in os.listdir(folder_input_data):
-    
-    if file.endswith(".csv"):
-        number_of_subjects += 1
-        file_name = os.path.join(folder_input_data, file)
-        print(file_name)
-        list_of_subjects.append(ut.Subject(file_name))
+file_extension = 'csv'
+file_paths = ut.get_Path(file_extension)
 
+for i in range(file_paths):
+	list_of_subjects.append(ut.Subject(i))
+	number_of_subjects += 1
 
 df = list_of_subjects[0].subject_data
 
@@ -94,6 +90,8 @@ app.layout = html.Div(children=[
         figure=fig3
     )
 ])
+
+
 ### Callback Functions ###
 ## Graph Update Callback
 @app.callback(
