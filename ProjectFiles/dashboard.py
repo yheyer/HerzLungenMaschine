@@ -21,7 +21,7 @@ file_extension = ''
 file_extension = 'csv'
 file_paths = ut.get_Path(file_extension)
 
-for i in range(file_paths):
+for i in file_paths:
 	list_of_subjects.append(ut.Subject(i))
 	number_of_subjects += 1
 
