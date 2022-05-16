@@ -42,18 +42,14 @@ class Subject(): #erstellt Klasse "Subject"
         self.subject_data = pd.read_csv(__f) #pd.read liest die Daten der Datei 
         self.subject_data = self.subject_data.interpolate(method='quadratic', axis=0) #interpolate (hier knackpunkt) erstellt Datenpunkte zwischen den Daten aus "__f"
         #interpolate(method='linear', axis=0) stellt eine lineare verbindung her 
-        __splited_id = re.findall(r'\d+',file_name)      
-        # print(__splited_id)
-        self.subject_id = ''.join(__splited_id)
+        #__splited_id = re.findall(r'\d+',file_name)      
+        self.subject_id = file_name.split(".csv")[0][-1]
         self.names = self.subject_data.columns.values.tolist()
         self.time = self.subject_data["Time (s)"]
         self.spO2 = self.subject_data["SpO2 (%)"]
         self.temp = self.subject_data["Temp (C)"]
         self.blood_flow = self.subject_data["Blood Flow (ml/s)"]
         print('Subject ' + self.subject_id + ' initialized')
-
-
-
         
 ### Aufgabe 2: Datenverarbeitung ###
 

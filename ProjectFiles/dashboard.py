@@ -31,6 +31,7 @@ df = list_of_subjects[0].subject_data # Default value shown on dashboard (Subjec
 for i in range(number_of_subjects):
     subj_numbers.append(list_of_subjects[i].subject_id)
 
+
 data_names = ["SpO2 (%)", "Blood Flow (ml/s)","Temp (C)"]
 algorithm_names = ['min','max']
 blood_flow_functions = ['CMA','SMA','Show Limits']
@@ -60,7 +61,7 @@ app.layout = html.Div(children=[
     ),
 
     html.Div([
-        dcc.Dropdown(options = subj_numbers, placeholder='Select a subject', value='20221', id='subject-dropdown'),
+        dcc.Dropdown(options = subj_numbers, placeholder='Select a subject', value='1', id='subject-dropdown'),
     html.Div(id='dd-output-container')
     ],
         style={"width": "15%"}
@@ -110,7 +111,7 @@ def update_figure(value, algorithm_checkmarks):
     print("Current Subject: ",value)
     print("current checked checkmarks are: ", algorithm_checkmarks)
 
-    ts = list_of_subjects[int(value)-20221].subject_data
+    ts = list_of_subjects[int(value)-1].subject_data
     #SpO2
     fig0 = px.line(ts, x="Time (s)", y = data_names[0])
     # Blood Flow
@@ -120,8 +121,29 @@ def update_figure(value, algorithm_checkmarks):
     
     ### Aufgabe 2: Min / Max ###
 
-    return fig0, fig1, fig2 
+    grp = ts.agg(['max', 'min', 'idxmin', 'idxmax'])
 
+    #print(max_values)
+    #print(min_values)
+
+    
+    if algorithm_checkmarks is not None: #Checking if it is not None, otherwise it would iterate over NoneType Object = not possible
+
+        if 'min' in algorithm_checkmarks:
+
+            fig0.add_trace(go.Scatter(x=[grp.loc['idxmin', data_names[0]]], y=[grp.loc['min', data_names[0]]], mode ='markers', name='Mininum', marker_color='black'))
+            fig1.add_trace(go.Scatter(x=[grp.loc['idxmin', data_names[1]]], y=[grp.loc['min', data_names[1]]], mode ='markers', name='Mininum', marker_color='black'))
+            fig2.add_trace(go.Scatter(x=[grp.loc['idxmin', data_names[2]]], y=[grp.loc['min', data_names[2]]], mode ='markers', name='Mininum', marker_color='black'))
+
+        
+        if 'max' in algorithm_checkmarks:
+
+            fig0.add_trace(go.Scatter(x=[grp.loc['idxmax', data_names[0]]], y=[grp.loc['max', data_names[0]]], mode ='markers', name='Maximum', marker_color='red'))
+            fig1.add_trace(go.Scatter(x=[grp.loc['idxmax', data_names[1]]], y=[grp.loc['max', data_names[1]]], mode ='markers', name='Maximum', marker_color='red'))
+            fig2.add_trace(go.Scatter(x=[grp.loc['idxmax', data_names[2]]], y=[grp.loc['max', data_names[2]]], mode ='markers', name='Maximum', marker_color='red'))
+
+    
+    return fig0, fig1, fig2 
 
 ## Blodflow Simple Moving Average Update
 @app.callback(
@@ -131,14 +153,14 @@ def update_figure(value, algorithm_checkmarks):
     Input('checklist-bloodflow','value')
 )
 def bloodflow_figure(value, bloodflow_checkmarks):
-    
+
     if value == None:
         value = subj_numbers[0]
 
     ## Calculate Moving Average: Aufgabe 2
     print(bloodflow_checkmarks)
 
-    bf = list_of_subjects[int(value)-20221].subject_data
+    bf = list_of_subjects[int(value)-1].subject_data
     fig3 = px.line(bf, x="Time (s)", y= data_names[1])
 
 
