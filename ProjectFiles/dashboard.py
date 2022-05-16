@@ -1,5 +1,6 @@
 from cmath import nan
 from tempfile import SpooledTemporaryFile
+from turtle import width
 import dash
 from dash import Dash, html, dcc, Output, Input, dash_table
 import plotly.express as px
@@ -10,8 +11,8 @@ import numpy as np
 import os
 import re
 
+# Dash-App erstellen
 app = Dash(__name__)
-
 
 list_of_subjects = []
 subj_numbers = []
@@ -31,13 +32,21 @@ for file in os.listdir(folder_input_data):
 
 df = list_of_subjects[0].subject_data
 
+# Reset CSS für Website
+path = os.path.join(folder_current, "assets")
+path = os.path.join(path, "static")
+path = os.path.join(path, "reset.css")
+
+app.css.append_css({'external_url': path})
+app.server.static_folder = 'static'
+
 
 for i in range(number_of_subjects):
     subj_numbers.append(list_of_subjects[i].subject_id)
 
 data_names = ["SpO2 (%)", "Blood Flow (ml/s)","Temp (C)"]
-algorithm_names = ['min','max']
-blood_flow_functions = ['CMA','SMA','Show Limits']
+algorithm_names = ['Min','Max']
+blood_flow_functions = ['CMA','SMA','Limits']
 
 
 fig0= go.Figure()
@@ -50,50 +59,121 @@ fig1 = px.line(df, x="Time (s)", y = "Blood Flow (ml/s)")
 fig2 = px.line(df, x="Time (s)", y = "Temp (C)")
 fig3 = px.line(df, x="Time (s)", y = "Blood Flow (ml/s)")
 
-app.layout = html.Div(children=[
-    html.H1(children='Cardiopulmonary Bypass Dashboard'),
-
-    html.Div(children='''
-        Hier könnten Informationen zum Patienten stehen....
-    '''),
-
-    dcc.Checklist(
-    id= 'checklist-algo',
-    options=algorithm_names,
-    inline=False
+#--App Layout--> TO DO: Farben, Schatten und Auswahl bzw. Filterleiste überarbeiten
+app.layout = html.Div([
+    
+    # Überschrift mit Umrandung
+    html.Div(children=[
+        html.H1(children='Cardiopulmonary Bypass Dashboard', 
+            style={'textAlign': 'center',
+            'background-color': "white",
+            "height": "10%",
+            "margin-left": "1%",
+            "margin-right": "1%",
+            "padding": "2%",
+            "border-radius": "10px"
+            })
+        ]
     ),
 
+    # Auswahl und Filter
+    html.Div(children=[
+        html.Div([
+            dcc.Dropdown(options = subj_numbers, placeholder='Select a subject', value='1', id='subject-dropdown'),
+            html.Div(id='dd-output-container')
+        ], style={"display": "inline-block",
+            "float": "left"}),
+
+        html.Div([
+            dcc.Checklist(
+                id= 'checklist-algo',
+                options=algorithm_names,
+            )
+
+        ], style={"display": "inline-block"}),
+
+        html.Div([
+            dcc.Checklist(
+                id= 'checklist-bloodflow',
+                options=blood_flow_functions,
+            )
+        ], style={"display": "inline-block"})
+
+    ], style={"margin-left": "1%",
+        "height": "10%"}),
+
+    # Vier Plots in Raster-Ansicht
     html.Div([
-        dcc.Dropdown(options = subj_numbers, placeholder='Select a subject', value='1', id='subject-dropdown'),
-    html.Div(id='dd-output-container')
-    ],
-        style={"width": "15%"}
-    ),
 
-    dcc.Graph(
-        id='dash-graph0',
-        figure=fig0
-    ),
+        # Zwei Plots nebeneinander
+        html.Div([
+            html.Div([
+                dcc.Graph(
+                    id='dash-graph0',
+                    figure=fig0,
+                    style={"border": "solid",
+                        "border-width": "10px",
+                        "border-color": "white",
+                        "border-radius": "10px"}
+                )
+            ], style={"width": "49.375%",
+                "display": "inline-block",
+                "float": "left"}),
 
-    dcc.Graph(
-        id='dash-graph1',
-        figure=fig1
-    ),
-    dcc.Graph(
-        id='dash-graph2',
-        figure=fig2
-    ),
+            html.Div([
+                dcc.Graph(
+                    id='dash-graph1',
+                    figure=fig1,
+                    style={"border": "solid",
+                        "border-width": "10px",
+                        "border-color": "white",
+                        "border-radius": "10px"}
+                )
+            ], style={"width": "49.375%",
+                "display": "inline-block",
+                "margin-left": "1.25%"})
 
-    dcc.Checklist(
-        id= 'checklist-bloodflow',
-        options=blood_flow_functions,
-        inline=False
-    ),
-    dcc.Graph(
-        id='dash-graph3',
-        figure=fig3
-    )
+        ]),
+
+        # Zwei Plots nebeneinander
+        html.Div([
+            html.Div([
+                dcc.Graph(
+                    id='dash-graph2',
+                    figure=fig2,
+                    style={"border": "solid",
+                        "border-width": "10px",
+                        "border-color": "white",
+                        "border-radius": "10px"}
+                ),
+            ], style={"width": "49.375%",
+                "display": "inline-block",
+                "float": "left"}),
+
+            html.Div([
+                dcc.Graph(
+                    id='dash-graph3',
+                    figure=fig3,
+                    style={"border": "solid",
+                        "border-width": "10px",
+                        "border-color": "white",
+                        "border-radius": "10px"}
+                )
+            ], style={"width": "49.375%",
+                "display": "inline-block",
+                "margin-left": "1.25%"})
+
+        ], style={"margin-top": "1%"}),
+        
+    ], style={
+        "margin-left": "1%",
+        "margin-right": "1%",
+        "margin-top": "2%",
+        "margin-bottom": "1%"
+    })
+
 ])
+
 ### Callback Functions ###
 ## Graph Update Callback
 @app.callback(
