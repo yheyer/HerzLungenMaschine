@@ -11,7 +11,7 @@ import os
 import re
 
 app = Dash(__name__)
-#test
+
 
 list_of_subjects = []
 subj_numbers = []
