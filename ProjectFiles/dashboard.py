@@ -1,3 +1,4 @@
+#%%
 from cmath import nan
 from tempfile import SpooledTemporaryFile
 import dash
@@ -139,3 +140,4 @@ def bloodflow_figure(value, bloodflow_checkmarks):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+# %%

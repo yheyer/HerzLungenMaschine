@@ -1,3 +1,4 @@
+#%%
 # Import external packages
 
 from multiprocessing.connection import wait
@@ -6,8 +7,8 @@ from datetime import datetime
 import numpy as np
 import re
 
-# Classes 
-
+#%%
+# Classes
 class Subject():
     def __init__(self, file_name):
 
@@ -15,7 +16,7 @@ class Subject():
 
         __f = open(file_name)
         self.subject_data = pd.read_csv(__f)
-        self.subject_data = self.subject_data.interpolate(method='linear', axis=0)
+        self.subject_data = self.subject_data.interpolate(method='quadratic', axis=0)
         __splited_id = re.findall(r'\d+',file_name)      
         self.subject_id = ''.join(__splited_id)
         self.names = self.subject_data.columns.values.tolist()
@@ -37,3 +38,4 @@ def calculate_CMA(df,n):
 
 def calculate_SMA(df,n):
     pass
+# %%
