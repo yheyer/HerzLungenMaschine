@@ -66,7 +66,9 @@ app.layout = html.Div([
     html.Div(children=[
         html.H1(children='Cardiopulmonary Bypass Dashboard', 
             style={'textAlign': 'center',
-            'background-color': "white",
+            "font-family": "Arial, Helvetica, sans-serif",
+            "color": "white",
+            'background-color': "rgb(70, 70, 70)",
             "height": "10%",
             "margin-left": "1%",
             "margin-right": "1%",
@@ -78,29 +80,64 @@ app.layout = html.Div([
 
     # Auswahl und Filter
     html.Div(children=[
+
+        # Label für Dropdown:
         html.Div([
-            dcc.Dropdown(options = subj_numbers, placeholder='Select a subject', value='1', id='subject-dropdown'),
+            html.Label("Select a subject:")
+        ], style={"color": "white",
+            "font-family": "Arial, Helvetica, sans-serif",
+            "display": "inline-block",
+            "float": "left",
+            "margin-right": "0.5%"}),
+
+        # Dropdown zur Auswahl
+        html.Div([
+            dcc.Dropdown(options = subj_numbers, value='1', id='subject-dropdown'),
             html.Div(id='dd-output-container')
         ], style={"display": "inline-block",
-            "float": "left"}),
+            "width": "5%",
+            "margin-right": "2%"}),
 
+        # Label für Checklisten:
         html.Div([
-            dcc.Checklist(
-                id= 'checklist-algo',
-                options=algorithm_names,
-            )
+            html.Label("Select filters:")
+        ], style={"color": "white",
+            "font-family": "Arial, Helvetica, sans-serif",
+            "display": "inline-block"}),
 
-        ], style={"display": "inline-block"}),
+        # Checkliste mit min und max
+        dcc.Checklist(
+            id= 'checklist-algo',
+            options=algorithm_names,
 
-        html.Div([
-            dcc.Checklist(
-                id= 'checklist-bloodflow',
-                options=blood_flow_functions,
-            )
-        ], style={"display": "inline-block"})
+            style={'display': 'inline-block'}, # Damit Checklisten nebeneinander 
+            labelStyle={"font-family": "Arial, Helvetica, sans-serif",
+                "color": "white",
+                'display': 'inline-block'},
+            inputStyle={"margin-right": "7.5px", "margin-left": "15px"}
+        ),
+
+        # Checkliste mit 
+        dcc.Checklist(
+            id= 'checklist-bloodflow',
+            options=blood_flow_functions,
+
+            style={'display': 'inline-block'}, # Damit Checklisten nebeneinander 
+            labelStyle={"font-family": "Arial, Helvetica, sans-serif",
+                "color": "white",
+                'display': 'inline-block'},
+            inputStyle={"margin-right": "7.5px", "margin-left": "15px"}
+        )
 
     ], style={"margin-left": "1%",
-        "height": "10%"}),
+        "margin-right": "1%",
+        "margin-top": "1%",
+        "padding": "1%",
+        "height": "10%",
+        "background-color": "rgb(70, 70, 70)",
+        "border-radius": "10px",
+        "display": "flex",                  
+        "align-items": "center"}), # Damit Elemente vertikal in der Mitte
 
     # Vier Plots in Raster-Ansicht
     html.Div([
@@ -116,7 +153,7 @@ app.layout = html.Div([
                         "border-color": "white",
                         "border-radius": "10px"}
                 )
-            ], style={"width": "49.375%",
+            ], style={"width": "49.5%",
                 "display": "inline-block",
                 "float": "left"}),
 
@@ -129,11 +166,11 @@ app.layout = html.Div([
                         "border-color": "white",
                         "border-radius": "10px"}
                 )
-            ], style={"width": "49.375%",
+            ], style={"width": "49.5%",
                 "display": "inline-block",
-                "margin-left": "1.25%"})
+                "margin-left": "1%"})
 
-        ]),
+        ], style={"margin-bottom": "0.75%"}),
 
         # Zwei Plots nebeneinander
         html.Div([
@@ -146,7 +183,7 @@ app.layout = html.Div([
                         "border-color": "white",
                         "border-radius": "10px"}
                 ),
-            ], style={"width": "49.375%",
+            ], style={"width": "49.5%",
                 "display": "inline-block",
                 "float": "left"}),
 
@@ -159,18 +196,13 @@ app.layout = html.Div([
                         "border-color": "white",
                         "border-radius": "10px"}
                 )
-            ], style={"width": "49.375%",
+            ], style={"width": "49.5%",
                 "display": "inline-block",
-                "margin-left": "1.25%"})
+                "margin-left": "1%"})
 
-        ], style={"margin-top": "1%"}),
+        ]),
         
-    ], style={
-        "margin-left": "1%",
-        "margin-right": "1%",
-        "margin-top": "2%",
-        "margin-bottom": "1%"
-    })
+    ], style={"margin": "1%"})
 
 ])
 
