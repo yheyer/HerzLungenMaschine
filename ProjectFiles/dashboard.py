@@ -59,7 +59,7 @@ fig1 = px.line(df, x="Time (s)", y = "Blood Flow (ml/s)")
 fig2 = px.line(df, x="Time (s)", y = "Temp (C)")
 fig3 = px.line(df, x="Time (s)", y = "Blood Flow (ml/s)")
 
-#--App Layout--> TO DO: Farben, Schatten und Auswahl bzw. Filterleiste überarbeiten
+#--App Layout--> TO DO: Farbe von Graphen
 app.layout = html.Div([
     
     # Überschrift mit Umrandung
@@ -68,7 +68,7 @@ app.layout = html.Div([
             style={'textAlign': 'center',
             "font-family": "Arial, Helvetica, sans-serif",
             "color": "white",
-            'background-color': "rgb(70, 70, 70)",
+            'background-color': "rgb(120, 120, 120)",
             "height": "10%",
             "margin-left": "1%",
             "margin-right": "1%",
@@ -134,7 +134,7 @@ app.layout = html.Div([
         "margin-top": "1%",
         "padding": "1%",
         "height": "10%",
-        "background-color": "rgb(70, 70, 70)",
+        "background-color": "rgb(120, 120, 120)",
         "border-radius": "10px",
         "display": "flex",                  
         "align-items": "center"}), # Damit Elemente vertikal in der Mitte
