@@ -72,6 +72,8 @@ app.layout = html.Div([
             "height": "10%",
             "margin-left": "1%",
             "margin-right": "1%",
+            "margin-bottom": "0",
+            "margin-top": "1%",
             "padding": "2%",
             "border-radius": "10px"
             })
@@ -202,7 +204,8 @@ app.layout = html.Div([
 
         ]),
         
-    ], style={"margin": "1%"})
+    ], style={"margin": "1%",
+        "margin-bottom": "0.5%"})
 
 ])
 
