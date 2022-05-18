@@ -34,8 +34,10 @@ class Subject():
 ### Aufgabe 2: Datenverarbeitung ###
 
 def calculate_CMA(df,n):
+    return df.expanding(n).mean()
     pass
     
 
 def calculate_SMA(df,n):
+    return df.rolling(n).mean()
     pass
