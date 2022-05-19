@@ -38,16 +38,6 @@ df = list_of_subjects[0].subject_data
 for i in range(number_of_subjects):
     subj_numbers.append(list_of_subjects[i].subject_id)
 
-
-# Reset CSS für Website
-# Pfad zur reset.css
-path = os.path.join(folder_current, "assets")
-path = os.path.join(path, "static")
-path = os.path.join(path, "reset.css")
-# reset.css hinzufügen
-app.css.append_css({'external_url': path})
-app.server.static_folder = 'static'
-
 #------------
 
 # Listen mit Labels für Graph und Checklisten
@@ -69,24 +59,12 @@ fig3 = px.line(df, x="Time (s)", y = data_names[1])
 #------------
 
 # App Layout: HTML und CSS wird hier erstellt und dann in wirkliche HTML Datei mit CSS umgewandelt
-# Alle CSS Elemente wurden hier direkt implementiert, in externer CSS Datei auch möglich
+# CSS Elemente teilweise in style.css ausgelagert
 app.layout = html.Div([
     
     # Überschrift mit Umrandung
     html.Div(children=[
-        html.H1(children='Cardiopulmonary Bypass Dashboard', 
-            style={'textAlign': 'center',
-            "font-family": "Arial, Helvetica, sans-serif",
-            "color": "white",
-            'background-color': "rgb(120, 120, 120)",
-            "height": "10%",
-            "margin-left": "1%",
-            "margin-right": "1%",
-            "margin-bottom": "0",
-            "margin-top": "1%",
-            "padding": "2%",
-            "border-radius": "10px"
-            })
+        html.H1(children='Cardiopulmonary Bypass Dashboard')
         ]
     ),
 
@@ -96,36 +74,29 @@ app.layout = html.Div([
         # Label für Dropdown:
         html.Div([
             html.Label("Select a subject:")
-        ], style={"color": "white",
-            "font-family": "Arial, Helvetica, sans-serif",
-            "display": "inline-block",
-            "float": "left",
-            "margin-right": "0.5%"}),
+        ]),
 
         # Dropdown zur Auswahl
         html.Div([
             dcc.Dropdown(options = subj_numbers, value='1', id='subject-dropdown'),
             html.Div(id='dd-output-container')
-        ], style={"display": "inline-block",
-            "width": "5%",
-            "margin-right": "2%"}),
+        ], className="div-dropdown"),
 
         # Label für Checklisten:
         html.Div([
             html.Label("Select filters:")
-        ], style={"color": "white",
-            "font-family": "Arial, Helvetica, sans-serif",
-            "display": "inline-block"}),
+        ]),
 
         # Checkliste mit min und max
         dcc.Checklist(
             id= 'checklist-algo',
             options=algorithm_names,
 
-            style={'display': 'inline-block'}, # Damit Checklisten nebeneinander 
+            # CSS Attribute für Checklisten wegen label und input nicht in style.css ausgelagert
+            style={'display': 'inline'}, 
             labelStyle={"font-family": "Arial, Helvetica, sans-serif",
                 "color": "white",
-                'display': 'inline-block'},
+                'display': 'inline'},
             inputStyle={"margin-right": "7.5px", "margin-left": "15px"}
         ),
 
@@ -134,22 +105,15 @@ app.layout = html.Div([
             id= 'checklist-bloodflow',
             options=blood_flow_functions,
 
-            style={'display': 'inline-block'}, # Damit Checklisten nebeneinander 
+            # CSS Attribute für Checklisten wegen label und input nicht in style.css ausgelagert
+            style={'display': 'inline'},
             labelStyle={"font-family": "Arial, Helvetica, sans-serif",
                 "color": "white",
-                'display': 'inline-block'},
+                'display': 'inline'},
             inputStyle={"margin-right": "7.5px", "margin-left": "15px"}
         )
 
-    ], style={"margin-left": "1%",
-        "margin-right": "1%",
-        "margin-top": "1%",
-        "padding": "1%",
-        "height": "10%",
-        "background-color": "rgb(120, 120, 120)",
-        "border-radius": "10px",
-        "display": "flex",                  
-        "align-items": "center"}), # Damit Elemente vertikal in der Mitte
+    ], className="div-dropdown-checklist"),
 
     # Vier Plots in Raster-Ansicht
     html.Div([
@@ -160,27 +124,17 @@ app.layout = html.Div([
                 dcc.Graph(
                     id='dash-graph0',
                     figure=fig0,
-                    style={"border": "solid",
-                        "border-width": "10px",
-                        "border-color": "white",
-                        "border-radius": "10px"}
+                    className="graph"
                 )
-            ], style={"width": "49.5%",
-                "display": "inline-block",
-                "float": "left"}),
+            ], className="div-graph-left"),
 
             html.Div([
                 dcc.Graph(
                     id='dash-graph1',
                     figure=fig1,
-                    style={"border": "solid",
-                        "border-width": "10px",
-                        "border-color": "white",
-                        "border-radius": "10px"}
+                    className="graph"
                 )
-            ], style={"width": "49.5%",
-                "display": "inline-block",
-                "margin-left": "1%"})
+            ], className="div-graph-right")
 
         ], style={"margin-bottom": "0.75%"}),
 
@@ -190,27 +144,17 @@ app.layout = html.Div([
                 dcc.Graph(
                     id='dash-graph2',
                     figure=fig2,
-                    style={"border": "solid",
-                        "border-width": "10px",
-                        "border-color": "white",
-                        "border-radius": "10px"}
+                    className="graph"
                 ),
-            ], style={"width": "49.5%",
-                "display": "inline-block",
-                "float": "left"}),
+            ], className="div-graph-left"),
 
             html.Div([
                 dcc.Graph(
                     id='dash-graph3',
                     figure=fig3,
-                    style={"border": "solid",
-                        "border-width": "10px",
-                        "border-color": "white",
-                        "border-radius": "10px"}
+                    className="graph"
                 )
-            ], style={"width": "49.5%",
-                "display": "inline-block",
-                "margin-left": "1%"})
+            ], className="div-graph-right")
 
         ]),
         
