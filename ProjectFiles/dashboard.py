@@ -18,48 +18,57 @@ list_of_subjects = []
 subj_numbers = []
 number_of_subjects = 0
 
+# Pfad für Ordner input_data
 folder_current = os.path.dirname(__file__) 
 print(folder_current)
 folder_input_data = os.path.join(folder_current, "input_data")
+
+# .csv Dateien durchgehen und Daten in Objekt Subject speichern
 for file in os.listdir(folder_input_data):
-    
     if file.endswith(".csv"):
         number_of_subjects += 1
         file_name = os.path.join(folder_input_data, file)
         print(file_name)
         list_of_subjects.append(ut.Subject(file_name))
 
-
+# Default Werte für Graphen setzen
 df = list_of_subjects[0].subject_data
 
-# Reset CSS für Website
-path = os.path.join(folder_current, "assets")
-path = os.path.join(path, "static")
-path = os.path.join(path, "reset.css")
-
-app.css.append_css({'external_url': path})
-app.server.static_folder = 'static'
-
-
+# Array mit Subject-IDs
 for i in range(number_of_subjects):
     subj_numbers.append(list_of_subjects[i].subject_id)
 
+
+# Reset CSS für Website
+# Pfad zur reset.css
+path = os.path.join(folder_current, "assets")
+path = os.path.join(path, "static")
+path = os.path.join(path, "reset.css")
+# reset.css hinzufügen
+app.css.append_css({'external_url': path})
+app.server.static_folder = 'static'
+
+#------------
+
+# Listen mit Labels für Graph und Checklisten
 data_names = ["SpO2 (%)", "Blood Flow (ml/s)","Temp (C)"]
 algorithm_names = ['Min','Max']
 blood_flow_functions = ['CMA','SMA','Limits']
-
 
 fig0= go.Figure()
 fig1= go.Figure()
 fig2= go.Figure()
 fig3= go.Figure()
 
-fig0 = px.line(df, x="Time (s)", y = "SpO2 (%)")
-fig1 = px.line(df, x="Time (s)", y = "Blood Flow (ml/s)")
-fig2 = px.line(df, x="Time (s)", y = "Temp (C)")
-fig3 = px.line(df, x="Time (s)", y = "Blood Flow (ml/s)")
+# Graphen mit default Werten und beschrifteten Achsen erstellen
+fig0 = px.line(df, x="Time (s)", y = data_names[0])
+fig1 = px.line(df, x="Time (s)", y = data_names[1])
+fig2 = px.line(df, x="Time (s)", y = data_names[2])
+fig3 = px.line(df, x="Time (s)", y = data_names[1])
 
-#--App Layout--> TO DO: Farbe von Graphen
+
+#--App Layout: HTML und CSS wird hier erstellt und dann in wirkliche HTML mit CSS umgewandelt.
+# Alle CSS Elemente wurden hier direkt implementiert, in externer CSS Datei auch möglich
 app.layout = html.Div([
     
     # Überschrift mit Umrandung
@@ -119,7 +128,7 @@ app.layout = html.Div([
             inputStyle={"margin-right": "7.5px", "margin-left": "15px"}
         ),
 
-        # Checkliste mit 
+        # Checkliste mit CMA SMA und Limits
         dcc.Checklist(
             id= 'checklist-bloodflow',
             options=blood_flow_functions,
@@ -209,8 +218,10 @@ app.layout = html.Div([
 
 ])
 
-### Callback Functions ###
-## Graph Update Callback
+
+#-----Callback Functions------------------
+
+# Callback handelt als Input die Checkliste für CMA SMA Limits und Output Graph 3
 @app.callback(
     # In- or Output('which html element','which element property')
     Output('dash-graph0', 'figure'),
@@ -219,10 +230,15 @@ app.layout = html.Div([
     Input('subject-dropdown', 'value'),
     Input('checklist-algo','value')
 )
+
+# Hier werden 3 von 4 (bis auf letze Bloodflow) verändert
 def update_figure(value, algorithm_checkmarks):
+
     print("Current Subject: ",value)
     print("current checked checkmarks are: ", algorithm_checkmarks)
+
     ts = list_of_subjects[int(value)-1].subject_data
+
     #SpO2
     fig0 = px.line(ts, x="Time (s)", y = data_names[0])
     # Blood Flow
@@ -235,13 +251,15 @@ def update_figure(value, algorithm_checkmarks):
     return fig0, fig1, fig2 
 
 
-## Blodflow Simple Moving Average Update
+# Callback handelt als Input die Checkliste für CMA SMA Limits und Output Graph 3
 @app.callback(
     # In- or Output('which html element','which element property')
     Output('dash-graph3', 'figure'),
     Input('subject-dropdown', 'value'),
     Input('checklist-bloodflow','value')
 )
+
+# Hier wird nur der letze Graph mit Bloodflow verändert
 def bloodflow_figure(value, bloodflow_checkmarks):
     
     ## Calculate Moving Average: Aufgabe 2
