@@ -1,3 +1,11 @@
+/* Styling der HTML Elemente durch CSS Datei
+Werden mittels Klassen oder als Elemente angesprochen */
+
+body { 
+    margin: 0; 
+    background-color: rgb(80, 80, 80);
+}
+
 h1 {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;

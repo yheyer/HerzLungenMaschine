@@ -59,7 +59,7 @@ fig3 = px.line(df, x="Time (s)", y = data_names[1])
 #------------
 
 # App Layout: HTML und CSS wird hier erstellt und dann in wirkliche HTML Datei mit CSS umgewandelt
-# CSS Elemente teilweise in style.css ausgelagert
+# CSS Styling teilweise in style.css ausgelagert
 app.layout = html.Div([
     
     # Überschrift mit Umrandung
