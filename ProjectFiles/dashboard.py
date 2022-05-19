@@ -66,8 +66,9 @@ fig1 = px.line(df, x="Time (s)", y = data_names[1])
 fig2 = px.line(df, x="Time (s)", y = data_names[2])
 fig3 = px.line(df, x="Time (s)", y = data_names[1])
 
+#------------
 
-#--App Layout: HTML und CSS wird hier erstellt und dann in wirkliche HTML mit CSS umgewandelt.
+# App Layout: HTML und CSS wird hier erstellt und dann in wirkliche HTML Datei mit CSS umgewandelt
 # Alle CSS Elemente wurden hier direkt implementiert, in externer CSS Datei auch möglich
 app.layout = html.Div([
     
