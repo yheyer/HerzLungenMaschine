@@ -1,11 +1,18 @@
 # Import external packages
-
+#%%
 from multiprocessing.connection import wait
 import pandas as pd
 from datetime import datetime
 import numpy as np
 import re
 
+
+
+#%%
+from sys import platform
+
+    
+#%%
 # Classes 
 
 class Subject():
@@ -18,7 +25,17 @@ class Subject():
         self.subject_data = self.subject_data.interpolate(method='quadratic', axis=0) 
         #https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.interpolate.html
         #Daten werden interpoliert und mit "quadratic" werden Datenpunkte erstellt um die Lücken in __f auszugleichen
-        __splited_id = re.findall(r'\d+',file_name)      
+        
+        # VORSICHT BEI WINDOWS MUSS DIE 1 in Eckigen Klammern weg
+        if platform == "darwin":
+            print("Mac")
+                # Windows...<
+            __splited_id = re.findall(r'\d+',file_name)[1]
+        else:
+    # Windows...<
+            __splited_id = re.findall(r'\d+',file_name)[1]
+        
+        print(__splited_id)      
         self.subject_id = ''.join(__splited_id)
         self.names = self.subject_data.columns.values.tolist()
         self.time = self.subject_data["Time (s)"]        
@@ -42,3 +59,4 @@ def calculate_CMA(df,n):
 def calculate_SMA(df,n):
     return df.rolling(n).mean()
     pass
+# %%
