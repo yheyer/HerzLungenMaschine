@@ -35,6 +35,8 @@ class Subject():
 def calculate_CMA(df,n):
     return df.expanding(n).mean()
     pass
+
+#hallo
     
 
 def calculate_SMA(df,n):
