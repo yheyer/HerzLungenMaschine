@@ -1,11 +1,18 @@
 # Import external packages
-
+#%%
 from multiprocessing.connection import wait
 import pandas as pd
 from datetime import datetime
 import numpy as np
 import re
 
+
+
+#%%
+from sys import platform
+
+    
+#%%
 # Classes 
 
 class Subject():
@@ -13,10 +20,22 @@ class Subject():
 
         ### Aufgabe 1: Interpolation ###
 
-        __f = open(file_name)
-        self.subject_data = pd.read_csv(__f)
-        self.subject_data = self.subject_data.interpolate(method='linear', axis=0)
-        __splited_id = re.findall(r'\d+',file_name)      
+        __f = open(file_name) #Kommando open öffnet Datei "file_name"
+        self.subject_data = pd.read_csv(__f) #Daten der Datei werden ausgelesen
+        self.subject_data = self.subject_data.interpolate(method='quadratic', axis=0) 
+        #https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.interpolate.html
+        #Daten werden interpoliert und mit "quadratic" werden Datenpunkte erstellt um die Lücken in __f auszugleichen
+        
+        # VORSICHT BEI WINDOWS MUSS DIE 1 in Eckigen Klammern weg
+        if platform == "darwin":
+            print("Mac")
+                # Windows...<
+            __splited_id = re.findall(r'\d+',file_name)[1]
+        else:
+    # Windows...<
+            __splited_id = re.findall(r'\d+',file_name)[1]
+        
+        print(__splited_id)      
         self.subject_id = ''.join(__splited_id)
         self.names = self.subject_data.columns.values.tolist()
         self.time = self.subject_data["Time (s)"]        
@@ -26,14 +45,18 @@ class Subject():
         print('Subject ' + self.subject_id + ' initialized')
 
 
-
         
 
 ### Aufgabe 2: Datenverarbeitung ###
 
 def calculate_CMA(df,n):
+    return df.expanding(n).mean()
     pass
+
+#hallo
     
 
 def calculate_SMA(df,n):
+    return df.rolling(n).mean()
     pass
+# %%
